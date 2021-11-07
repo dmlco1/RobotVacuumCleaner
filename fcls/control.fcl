@@ -28,11 +28,11 @@ FUZZIFY rightSensor
 END_FUZZIFY
 
 DEFUZZIFY action
-    TERM strong-left := 45;
+    TERM strongLeft := 45;
     TERM left := 30;
     TERM center := 0;
     TERM right := -30;
-    TERM strong-right := -45;
+    TERM strongRight := -45;
     METHOD : COGS;
     DEFAULT := 0;
 END_DEFUZZIFY
@@ -42,10 +42,10 @@ RULEBLOCK No1
     OR : BSUM;
     ACT : MIN;
     ACCU : MAX;
-    RULE 1 : IF leftSensor IS near AND center IS near THEN action IS strong-right;
-    RULE 2 : IF RightSensor IS near AND center IS near THEN action IS strong-left;
-    RULE 3 : IF leftSensor IS near AND RightSensor IS near THEN execute IS center;
-    RULE 4 : IF leftSensor IS near AND center IS average THEN action IS right;
-    RULE 5 : IF RightSensor IS near AND center IS average THEN action IS left;
+    RULE 1 : IF leftSensor IS near AND centerSensor IS near THEN action IS strongRight;
+    RULE 2 : IF rightSensor IS near AND centerSensor IS near THEN action IS strongLeft;
+    RULE 3 : IF leftSensor IS near AND rightSensor IS near THEN action IS center;
+    RULE 4 : IF leftSensor IS near AND centerSensor IS average THEN action IS right;
+    RULE 5 : IF rightSensor IS near AND centerSensor IS average THEN action IS left;
 END_RULEBLOCK
 END_FUNCTION_BLOCK
