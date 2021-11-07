@@ -1,10 +1,51 @@
 FUNCTION_BLOCK control
 
 VAR_INPUT
-    left : REAL;
-    center : REAL;
-    right : REAL;
+    leftSensor : REAL;
+    centerSensor : REAL;
+    rightSensor : REAL;
 END_VAR
 VAR_OUTPUT
     action : REAL;
 END_VAR
+
+FUZZIFY leftSensor
+    TERM near := (0, 1) (1, 1) (2, 0.9) (3, 0.8) (4, 0.6) (5, 0.5) (6, 0.4) (7, 0.3) (8, 0) (9, 0) (10 ,0);
+    TERM average := (0, 0) (1, 0) (2, 0) (3, 0.3) (4, 0.6) (5, 1) (6, 0.6) (7, 0.3) (8, 0) (9, 0) (10 ,0);
+    TERM far := (0, 0) (1, 0) (2, 0.1) (3, 0.2) (4, 0.4) (5, 0.5) (6, 0.6) (7, 0.7) (8, 1) (9, 1) (10 ,1);
+END_FUZZIFY
+
+FUZZIFY centerSensor
+    TERM near := (0, 1) (1, 1) (2, 0.9) (3, 0.8) (4, 0.6) (5, 0.5) (6, 0.4) (7, 0.3) (8, 0) (9, 0) (10 ,0);
+    TERM average := (0, 0) (1, 0) (2, 0) (3, 0.3) (4, 0.6) (5, 1) (6, 0.6) (7, 0.3) (8, 0) (9, 0) (10 ,0);
+    TERM far := (0, 0) (1, 0) (2, 0.1) (3, 0.2) (4, 0.4) (5, 0.5) (6, 0.6) (7, 0.7) (8, 1) (9, 1) (10 ,1);
+END_FUZZIFY
+
+FUZZIFY rightSensor
+    TERM near := (0, 1) (1, 1) (2, 0.9) (3, 0.8) (4, 0.6) (5, 0.5) (6, 0.4) (7, 0.3) (8, 0) (9, 0) (10 ,0);
+    TERM average := (0, 0) (1, 0) (2, 0) (3, 0.3) (4, 0.6) (5, 1) (6, 0.6) (7, 0.3) (8, 0) (9, 0) (10 ,0);
+    TERM far := (0, 0) (1, 0) (2, 0.1) (3, 0.2) (4, 0.4) (5, 0.5) (6, 0.6) (7, 0.7) (8, 1) (9, 1) (10 ,1);
+END_FUZZIFY
+
+DEFUZZIFY action
+    TERM strong-left := 45;
+    TERM left := 30;
+    TERM center := 0;
+    TERM right := -30;
+    TERM strong-right := -45;
+    METHOD : COGS;
+    DEFAULT := 0;
+END_DEFUZZIFY
+
+RULEBLOCK No1
+    AND : MIN;
+    OR : BSUM;
+    ACT : MIN;
+    ACCU : MAX;
+    RULE 1 : IF leftSensor IS near AND center IS near THEN action IS strong-right;
+    RULE 2 : IF RightSensor IS near AND center IS near THEN action IS strong-left;
+    RULE 3 : IF leftSensor IS near AND RightSensor IS near THEN execute IS center;
+    RULE 4 : IF leftSensor IS near AND center IS average THEN action IS right;
+    RULE 5 : IF RightSensor IS near AND center IS average THEN action IS left;
+END_RULEBLOCK
+END_FUNCTION_BLOCK
