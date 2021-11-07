@@ -1,0 +1,10 @@
+FUNCTION_BLOCK control
+
+VAR_INPUT
+    left : REAL;
+    center : REAL;
+    right : REAL;
+END_VAR
+VAR_OUTPUT
+    action : REAL;
+END_VAR
