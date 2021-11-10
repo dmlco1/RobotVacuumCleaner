@@ -1,13 +1,13 @@
 import net.sourceforge.jFuzzyLogic.FIS;
 import net.sourceforge.jFuzzyLogic.FunctionBlock;
 
-import java.util.Scanner;
-
 public class VacuumCleaner {
     public static void main(String[] args) {
 
-        Simulator robot = new Simulator();
+        // initialize Simulator
+        Simulator vacuum = new Simulator();
 
+        // get file
         String filename = "fcls/control.fcl";
         FIS fis = FIS.load(filename, true);
         if (fis == null) {
@@ -20,9 +20,9 @@ public class VacuumCleaner {
             FunctionBlock fb = fis.getFunctionBlock(null);
 
             // set the inputs
-            fb.setVariable("leftSensor", robot.getDistanceL());
-            fb.setVariable("centerSensor", robot.getDistanceC());
-            fb.setVariable("rightSensor", robot.getDistanceR());
+            fb.setVariable("leftSensor", vacuum.getDistanceL());
+            fb.setVariable("centerSensor", vacuum.getDistanceC());
+            fb.setVariable("rightSensor", vacuum.getDistanceR());
             // evaluate
             fb.evaluate();
 
@@ -30,8 +30,10 @@ public class VacuumCleaner {
             fb.getVariable("action").defuzzify();
             double newAngle = fb.getVariable("action").getValue();
 
-            robot.setRobotAngle(newAngle);
-            robot.step();
+            // set the new angle for the vacuum wheels
+            vacuum.setRobotAngle(newAngle);
+            // step - new state of the GUI
+            vacuum.step();
         }
     }
 }
